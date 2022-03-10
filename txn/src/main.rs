@@ -14,6 +14,8 @@ use std::time::Duration;
 // 存储两行数据,第一行是,第二行行数据是这个编号的数据再谁手上
 static mut ARR: [[i32; 5]; 2] = [[0i32; 5]; 2];
 
+static mut kill: i32 = 0;
+
 fn write_begin_action(num: i32, thread_id: i32) -> bool{
     let mut check = true;
     unsafe {
@@ -82,17 +84,32 @@ fn main() {
             if check == true {
                 break
             }
+            unsafe {
+                if kill == 1 {
+                    break;
+                }
+            }
         }
         loop {
             check = write_begin_action(2, thread_id);
             if check == true {
                 break
             }
+            unsafe {
+                if kill == 1 {
+                    break;
+                }
+            }
         }
         loop {
             check = write_begin_action(3, thread_id);
             if check == true {
                 break
+            }
+            unsafe {
+                if kill == 1 {
+                    break;
+                }
             }
         }
         // 模拟操作
@@ -112,17 +129,32 @@ fn main() {
             if check == true {
                 break
             }
+            unsafe {
+                if kill == 2 {
+                    break;
+                }
+            }
         }
         loop {
             check = write_begin_action(4, thread_id);
             if check == true {
                 break
             }
+            unsafe {
+                if kill == 2 {
+                    break;
+                }
+            }
         }
         loop {
             check = write_begin_action(2, thread_id);
             if check == true {
                 break
+            }
+            unsafe {
+                if kill == 2 {
+                    break;
+                }
             }
         }
         thread::sleep(Duration::from_millis(2000));
@@ -140,17 +172,32 @@ fn main() {
             if check == true {
                 break
             }
+            unsafe {
+                if kill == 3 {
+                    break;
+                }
+            }
         }
         loop {
             check = write_begin_action(4, thread_id);
             if check == true {
                 break
             }
+            unsafe {
+                if kill == 3 {
+                    break;
+                }
+            }
         }
         loop {
             check = write_begin_action(1, thread_id);
             if check == true {
                 break
+            }
+            unsafe {
+                if kill == 3 {
+                    break;
+                }
             }
         }
         thread::sleep(Duration::from_millis(2000));
@@ -168,11 +215,21 @@ fn main() {
             if check == true {
                 break
             }
+            unsafe {
+                if kill == 4 {
+                    break;
+                }
+            }
         }
         loop {
             check = write_begin_action(4, thread_id);
             if check == true {
                 break
+            }
+            unsafe {
+                if kill == 4 {
+                    break;
+                }
             }
         }
         thread::sleep(Duration::from_millis(2000));
@@ -209,16 +266,19 @@ fn main() {
                         continue
                     }
                     1 => {
-                        // 杀死线程1
+                        kill = 1;
                     }
                     2 => {
-                        // 杀死线程2
+                        kill = 2;
                     }
                     3 => {
-                        // 杀死线程3
+                        kill = 3;
                     }
                     4 => {
-                        // 杀死线程4
+                        kill = 4;
+                    }
+                    _ => {
+                        continue
                     }
                 }
             }
@@ -231,4 +291,5 @@ fn main() {
     thread3.join().unwrap();
     thread4.join().unwrap();
     thread_detect_deadlock.join().unwrap();
+    
 }
