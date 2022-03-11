@@ -266,15 +266,19 @@ fn main() {
                         continue
                     }
                     1 => {
+                        println!("杀死线程1");
                         kill = 1;
                     }
                     2 => {
+                        println!("杀死线程2");
                         kill = 2;
                     }
                     3 => {
+                        println!("杀死线程3");
                         kill = 3;
                     }
                     4 => {
+                        println!("杀死线程4");
                         kill = 4;
                     }
                     _ => {
